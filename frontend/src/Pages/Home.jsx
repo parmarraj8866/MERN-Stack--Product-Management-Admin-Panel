@@ -1,0 +1,141 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { FaFolderOpen, FaBoxOpen } from "react-icons/fa";
+import { BiGitBranch } from "react-icons/bi";
+import { GiTakeMyMoney } from "react-icons/gi";
+
+export default function DashboardHome() {
+  const [Cate, setCate] = useState([]);
+  const [SubCate, setSubCate] = useState([]);
+  const [Product, setProduct] = useState([]);
+
+  const CateURL = import.meta.env.VITE_CATEGORY_URL;
+  
+  const SubCateURL = import.meta.env.VITE_SUBCATEGORY_URL;
+
+  const ProURL = import.meta.env.VITE_PRODUCT_URL;
+
+  async function ShowCategoryCount() {
+    try {
+      const res = await axios.get(CateURL);
+      setCate(res.data);
+    } catch (err) {
+      console.error("Error fetching categories:", err);
+    }
+  }
+
+  async function ShowSubCategoryCount() {
+    try {
+      const res = await axios.get(SubCateURL);
+      setSubCate(res.data);
+    } catch (err) {
+      console.error("Error fetching subcategories:", err);
+    }
+  }
+
+  async function ShowProductCount() {
+    try {
+      const res = await axios.get(ProURL);
+      setProduct(res.data);
+    } catch (err) {
+      console.error("Error fetching products:", err);
+    }
+  }
+
+  useEffect(() => {
+    ShowCategoryCount();
+    ShowSubCategoryCount();
+    ShowProductCount();
+  }, []);
+
+  let result = 0;
+  for (let i = 0; i < Product.length; i++) {
+    let finalPrice = Number(Product[i].ProductPrice);
+    result += finalPrice;
+  }
+
+  const stats = [
+    {
+      title: "Categories",
+      bgColor: "#2983e3ff",
+      color: "white",
+      icon: <FaFolderOpen />,
+      count: Cate.length,
+    },
+    {
+      title: "Subcategories",
+      bgColor: "#6a28d5ff",
+      color: "white",
+      icon: <BiGitBranch />,
+      count: SubCate.length,
+    },
+    {
+      title: "Products",
+      bgColor: "#0ee17fff",
+      color: "white",
+      icon: <FaBoxOpen />,
+      count: Product.length,
+    },
+    {
+      title: "Investments",
+      bgColor: "#e27d2bff",
+      color: "white",
+      icon: <GiTakeMyMoney />,
+      count: "₹" + result,
+    },
+  ];
+
+  return (
+    <div className="container-fluid  py-2 px-2 ">
+      <div
+        className="p-2 rounded"
+        style={{
+          backgroundColor: "rgba(10, 25, 47, 0.95)",
+          height: "100vh",
+          border: "1px solid rgba(92, 99, 109, 0.95)",
+        }}
+      >
+        <div className="text-center mb-5 mt-3">
+          <h1 className="fw-semibold text-light">Dashboard View</h1>
+        </div>
+
+        <div className="row justify-content-center g-4">
+          {stats.map((item, index) => (
+            <div className="col-12 col-sm-6 col-md-3" key={index}>
+              <div
+                className="card text-center p-4 border-0 rounded-2 shadow-sm stat-card"
+                style={{
+                  borderRadius: "16px",
+                  background: item.bgColor,
+                  transition: "transform 0.3s, box-shadow 0.3s",
+                }}
+              >
+                <div
+                  className=" mx-auto mb-3"
+                  style={{
+                    width: "60px",
+                    height: "60px",
+                    backgroundColor: item.color,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: "50%",
+                  }}
+                >
+                  <i className={"fs-2"} style={{ color: `${item.bgColor}` }}>
+                    {item.icon}
+                  </i>
+                </div>
+                <h5 className="fw-semibold mb-1 text-white">{item.title}</h5>
+                <h3 className="fw-bold" style={{ color: item.color }}>
+                  {item.count}
+                </h3>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
