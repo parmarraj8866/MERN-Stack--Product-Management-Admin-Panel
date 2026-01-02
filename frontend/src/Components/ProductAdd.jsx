@@ -75,7 +75,7 @@ export default function ProductAdd() {
         ProductPrice: "",
       });
     }
-    // redirect("/productView");
+    redirect("/productView");
   }
 
   return (

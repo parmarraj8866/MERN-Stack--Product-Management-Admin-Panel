@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaFolderOpen, FaBoxOpen } from "react-icons/fa";
@@ -9,9 +10,14 @@ export default function DashboardHome() {
   const [Cate, setCate] = useState([]);
   const [SubCate, setSubCate] = useState([]);
   const [Product, setProduct] = useState([]);
+  const redirect = useNavigate();
+
+  console.log(Cate);
+  console.log(SubCate);
+  console.log(Product);
 
   const CateURL = import.meta.env.VITE_CATEGORY_URL;
-  
+
   const SubCateURL = import.meta.env.VITE_SUBCATEGORY_URL;
 
   const ProURL = import.meta.env.VITE_PRODUCT_URL;
@@ -19,7 +25,7 @@ export default function DashboardHome() {
   async function ShowCategoryCount() {
     try {
       const res = await axios.get(CateURL);
-      setCate(res.data);
+      setCate(res.data.records);
     } catch (err) {
       console.error("Error fetching categories:", err);
     }
@@ -28,7 +34,7 @@ export default function DashboardHome() {
   async function ShowSubCategoryCount() {
     try {
       const res = await axios.get(SubCateURL);
-      setSubCate(res.data);
+      setSubCate(res.data.records);
     } catch (err) {
       console.error("Error fetching subcategories:", err);
     }
@@ -37,7 +43,7 @@ export default function DashboardHome() {
   async function ShowProductCount() {
     try {
       const res = await axios.get(ProURL);
-      setProduct(res.data);
+      setProduct(res.data.records);
     } catch (err) {
       console.error("Error fetching products:", err);
     }
@@ -51,7 +57,7 @@ export default function DashboardHome() {
 
   let result = 0;
   for (let i = 0; i < Product.length; i++) {
-    let finalPrice = Number(Product[i].ProductPrice);
+    let finalPrice = Number(Product[i].p_price);
     result += finalPrice;
   }
 
@@ -59,6 +65,7 @@ export default function DashboardHome() {
     {
       title: "Categories",
       bgColor: "#2983e3ff",
+      loc: "categoryView",
       color: "white",
       icon: <FaFolderOpen />,
       count: Cate.length,
@@ -66,6 +73,7 @@ export default function DashboardHome() {
     {
       title: "Subcategories",
       bgColor: "#6a28d5ff",
+      loc: "subcategoryView",
       color: "white",
       icon: <BiGitBranch />,
       count: SubCate.length,
@@ -73,6 +81,7 @@ export default function DashboardHome() {
     {
       title: "Products",
       bgColor: "#0ee17fff",
+      loc: "productView",
       color: "white",
       icon: <FaBoxOpen />,
       count: Product.length,
@@ -80,6 +89,7 @@ export default function DashboardHome() {
     {
       title: "Investments",
       bgColor: "#e27d2bff",
+      loc: "productView",
       color: "white",
       icon: <GiTakeMyMoney />,
       count: "₹" + result,
@@ -102,7 +112,12 @@ export default function DashboardHome() {
 
         <div className="row justify-content-center g-4">
           {stats.map((item, index) => (
-            <div className="col-12 col-sm-6 col-md-3" key={index}>
+            <div
+              className="col-12 col-sm-6 col-md-3"
+              onClick={() => redirect(`/${item.loc}`)}
+              key={index}
+               style={{cursor : "pointer"}}
+            >
               <div
                 className="card text-center p-4 border-0 rounded-2 shadow-sm stat-card"
                 style={{
