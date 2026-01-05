@@ -1,5 +1,5 @@
 const Product = require("../Model/product.model");
-const { createModel, viewMorePopulateModel } = require("../utils/CommonModel");
+const { createModel, viewMorePopulateModel } = require("../utils/commonModel");;
 
 exports.store = async (req, res) => {
   const { category_id, subcategory_id, p_name, p_price, status } = req.body;
