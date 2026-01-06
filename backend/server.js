@@ -19,6 +19,7 @@ app.use(cors({
 const categoryRoute = require('./Routes/category.route')
 const subCategoryRoute = require('./Routes/subcategory.route')
 const product = require('./Routes/product.route')
+const userRoute = require("./Routes/user.route")
 
 
 // api routing  
@@ -26,6 +27,7 @@ const product = require('./Routes/product.route')
 app.use('/api/category', categoryRoute)
 app.use('/api/subcategory', subCategoryRoute)
 app.use('/api/product', product)
+app.use('/api/user', userRoute)
 
 
 
