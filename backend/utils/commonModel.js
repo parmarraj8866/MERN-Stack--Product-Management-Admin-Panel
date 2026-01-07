@@ -70,3 +70,20 @@ exports.viewMorePopulateModel = async (Model, populateId1, selecteOption1, popul
         })
         )
 }
+
+
+exports.existModel = async (Model, field, message) => {
+    const records = await Model.findOne(field)
+
+    if (records) {
+        return {
+            success: true,
+            records
+        }
+    } else {
+        return {
+            success: false,
+            message
+        }
+    }
+}

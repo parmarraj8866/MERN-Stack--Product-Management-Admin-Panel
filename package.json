@@ -5,12 +5,11 @@
   "name": "product-management",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "frontend" : "cd frontend && npm run dev",
-    "backend" : "cd backend && npm start",
-    "start" : "concurrently \"npm run frontend\" \"npm run backend\""
+    "frontend": "cd frontend && npm run dev",
+    "backend": "cd backend && npm start",
+    "start": "concurrently \"npm run frontend\" \"npm run backend\""
   },
   "keywords": [],
   "author": "",
