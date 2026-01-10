@@ -1,5 +1,5 @@
 const Product = require("../Model/product.model");
-const { createModel, viewMorePopulateModel } = require("../utils/commonModel");;
+const { createModel, viewMorePopulateModel, updateModel, trashModel } = require("../utils/commonModel");;
 
 exports.store = async (req, res) => {
   const { category_id, subcategory_id, p_name, p_price, status } = req.body;
@@ -14,4 +14,31 @@ exports.store = async (req, res) => {
 exports.index = async (req, res) => {
   const result = await viewMorePopulateModel(Product, "category_id", "name", "subcategory_id", "sub_name")
   res.json(result)
+}
+
+exports.productUpdate = async (req, res) => {
+  const { id } = req.params
+  const { category_id, subcategory_id, p_name, p_price } = req.body
+
+  const product = await updateModel(Product, id, { category_id, subcategory_id, p_name, p_price }, "Product Updated!")
+
+  res.json({
+    product
+  })
+}
+exports.productTrash = async (req, res) => {
+  const { id } = req.params
+  const product = await trashModel(Product, id, "Product Deleted!")
+
+  res.json({
+    product
+  })
+}
+exports.productSingle = async (req, res) => {
+  const { id } = req.params
+  const product = await Product.findById(id).populate("category_id").populate("subcategory_id")
+  await product.save();
+  res.json({
+    product
+  })
 }

@@ -8,6 +8,8 @@ import Swal from "sweetalert2";
 export default function ProductList(props) {
   const [Product, setProduct] = useState([]);
 
+  console.log("Product", Product)
+
   const URL = import.meta.env.VITE_PRODUCT_URL;
   
   async function showData() {
@@ -87,11 +89,11 @@ export default function ProductList(props) {
                   <td>₹{ele.p_price}</td>
                   <td>{ele.createdAt ? new Date(ele.createdAt).toLocaleString() : "-"}</td>
                   <td className="text-center">
-                    <NavLink to={`/productAdd/${ele.id}`} className="btn btn-sm btn-outline-warning me-2">
+                    <NavLink to={`/product/${ele._id}`} className="btn btn-sm btn-outline-warning me-2">
                       <AiFillEdit className="fs-4" />
                     </NavLink>
                     <button className="btn btn-sm btn-outline-danger"
-                    onClick={()=> Trash(ele.id)}>
+                    onClick={()=> Trash(ele._id)}>
                       <AiFillDelete className="fs-4" />
                     </button>
                   </td>

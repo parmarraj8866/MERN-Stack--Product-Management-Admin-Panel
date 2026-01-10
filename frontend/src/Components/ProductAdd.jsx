@@ -5,47 +5,50 @@ import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function ProductAdd() {
-  const { register, handleSubmit, reset, watch } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
   const [ProductSubCate, setProductSubCate] = useState([]);
 
-  console.log("ProductSubCate", ProductSubCate)
+  console.log("ProductSubCate", ProductSubCate);
+
   const URL = import.meta.env.VITE_PRODUCT_URL;
   const CateURL = import.meta.env.VITE_CATEGORY_URL;
   const SubCateURL = import.meta.env.VITE_SUBCATEGORY_URL;
+
   const { id } = useParams();
   let redirect = useNavigate();
   let date = new Date();
   const CreateDate =
     date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
 
-  // const selectedCategory = watch("ProductCategory");
-
+  //  Product URL
   async function ShowData() {
     const res = await axios.get(`${URL}/${id}`);
-    reset(res.data);
+    console.log("Product BY ", res.data.product);
+
+    const product = res.data.product;
+    reset({
+      ...product,
+      category_id: product.category_id._id,
+      subcategory_id: product.subcategory_id._id,
+    });
   }
 
-  
-
+  // category url
   async function ShowDataSubCategory() {
     const res = await axios.get(SubCateURL);
     setProductSubCate(res.data.records);
   }
 
-  console.log(ProductSubCate)
-
   useEffect(() => {
     ShowData();
-    
     ShowDataSubCategory();
-  }, [id]);
+  }, []);
 
   async function addProduct(data) {
-    console.log("DATA...", data)
     if (id == null) {
-     const res =  await axios.post(URL, { CreateDate, ...data });
-     console.log(res)
+      const res = await axios.post(URL, { CreateDate, ...data });
+      console.log(res);
       reset({
         ProductCategory: "--Select Category--",
         ProductSubCategory: "--Select Sub Category--",
@@ -131,7 +134,7 @@ export default function ProductAdd() {
             color: "white",
             border: "1px solid rgba(92, 99, 109, 0.95)",
           }}
-          {...register("sub_category_id")}
+          {...register("subcategory_id")}
           required
         >
           <option selected disabled>

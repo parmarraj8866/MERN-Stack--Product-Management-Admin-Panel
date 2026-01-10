@@ -7,47 +7,30 @@ import Swal from "sweetalert2";
 export default function SubCategory() {
   const { register, handleSubmit, reset } = useForm();
   const [SubCate, setSubCate] = useState([]);
-
   const URL = import.meta.env.VITE_SUBCATEGORY_URL;
   const CATEURL = import.meta.env.VITE_CATEGORY_URL;
   let date = new Date();
-  const currentDate =
-    date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
   let { id } = useParams();
   let redirect = useNavigate();
 
+  const currentDate =
+    date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+
+  // Sub Category
   async function ShowData() {
     const res = await axios.get(`${URL}/${id}`);
-    reset(res.data);
+    console.log("My Res", res.data.subCategory);
+    reset(res.data.subCategory);
   }
 
+  // Category
   async function ShowDataCateGory() {
     const res = await axios.get(CATEURL);
     setSubCate(res.data.records);
   }
 
-  console.log("SubCate", SubCate);
-
+  // Sub Category Add and Update 
   async function addSubcategory(data) {
-    const res = await axios.get(URL);
-
-    // let findSubCate = res.data.find(
-    //   (ele) => ele.subCategory_name == data.subCategory_name
-    // );
-
-    // if (findSubCate && id == null) {
-    //   Swal.fire({
-    //     position: "top-center",
-    //     icon: "error",
-    //     title: "Sub-Category Already Exists!",
-    //     showConfirmButton: false,
-    //     timer: 1000,
-    //   });
-    //   return;
-    // }
-
-    console.log("DATA : ", data);
-
     if (id == null) {
       const res = await axios.post(URL, { currentDate, ...data });
       console.log("res", res);

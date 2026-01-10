@@ -1,10 +1,15 @@
-const { store, index } = require('../Controller/category.controller')
+const { store, index, updateCategory, trashCategory, singleCategory } = require('../Controller/category.controller')
+const { verifyToken } = require('../middleware/verify')
 
 const router = require('express').Router()
 
 router
-.route('/')
-.post(store)
-.get(index)
+    .route('/')
+    // .post(verifyToken, store)
+    .post(store)
+    .get(index)
+router.put("/:id", updateCategory)
+router.delete("/:id", trashCategory)
+router.get("/:id", singleCategory)
 
 module.exports = router

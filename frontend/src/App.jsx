@@ -31,9 +31,9 @@ export default function App() {
           <Route path="/categoryView" element={<>  <SideMenuBar /> <DashboardNav title="Category View"/> <CategoryList title="View Category" /> </>} />
           <Route path="/subcategoryView" element={<> <SideMenuBar /> <DashboardNav title="Sub-Category View"/> <SubCategoryList title="View Sub Category" /></>} />
           <Route path="/productView" element={<> <SideMenuBar /> <DashboardNav title="Product View"/> <ProductList title="View Product" /> </>} />
-          <Route path="/categoryadd/:id" element={<>  <SideMenuBar /> <DashboardNav title="Category Add"/> <CreateCategory /> </>}/>
+          <Route path="/category/:id" element={<>  <SideMenuBar /> <DashboardNav title="Category Add"/> <CreateCategory /> </>}/>
           <Route path="/subcategory/:id" element={<> <SideMenuBar /> <DashboardNav  title="Sub-Category Add"/> <SubCategory /> </>} />
-          <Route path="/productAdd/:id" element={<> <SideMenuBar /> <DashboardNav  title="Product Add"/> <ProductAdd /></>} />
+          <Route path="/product/:id" element={<> <SideMenuBar /> <DashboardNav  title="Product Add"/> <ProductAdd /></>} />
         
         </Routes>
       </section>

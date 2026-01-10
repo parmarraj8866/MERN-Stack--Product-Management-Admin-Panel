@@ -13,7 +13,6 @@ export default function CategoryList(props) {
     const res = await axios.get(URL);
     console.log(res)
     setList(res.data.records);
-
   }
 
   console.log(List)
@@ -81,13 +80,13 @@ export default function CategoryList(props) {
                   <td className="text-center">
                     <NavLink
                       className="btn btn-sm btn-warning me-2"
-                      to={`/categoryadd/${ele.id}`}
+                      to={`/category/${ele._id}`}
                     >
                       <AiFillEdit className="fs-4" />
                     </NavLink>
                     <NavLink
                       className="btn btn-sm btn-outline-danger"
-                      onClick={() => Trash(ele.id)}
+                      onClick={() => Trash(ele._id)}
                     >
                       <AiFillDelete className="fs-4" />
                     </NavLink>

@@ -1,22 +1,28 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function CreateCategory() {
   const { register, handleSubmit, reset } = useForm();
-
+  let redirect = useNavigate();
   const URL = import.meta.env.VITE_CATEGORY_URL;
   let date = new Date();
+
   const CreateDate =
     date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
-  const { id } = useParams();
-  let redirect = useNavigate();
+
+  const { id } = useParams();  // Only Use in Params id
+  console.log(id)
+
+  // const [searchParams] = useSearchParams(); // Use in query id
+  // const id = searchParams.get("id");
 
   async function ShowData() {
     const res = await axios.get(`${URL}/${id}`);
-    reset(res.data);
+    console.log("res ok", res.data)
+    reset(res.data.category);
   }
 
   useEffect(() => {
@@ -24,24 +30,6 @@ export default function CreateCategory() {
   }, [id]);
 
   async function addcategory(data) {
-    let res = await axios.get(URL);
-    console.log(res);
-
-    // let findCategory = res.data.records.find(
-    //   (ele) => ele.Product_category == data.Product_category
-    // );
-
-    // if (findCategory && id == null) {
-    //   Swal.fire({
-    //     position: "top-center",
-    //     icon: "error",
-    //     title: "Category Already Exists!",
-    //     showConfirmButton: false,
-    //     timer: 1000,
-    //   });
-    //   return;
-    // }
-
     if (id == null) {
       try {
         const res = await axios.post(URL, { CreateDate, ...data });
@@ -55,14 +43,14 @@ export default function CreateCategory() {
             showConfirmButton: true,
             timer: 3000,
           });
-        }else{
-           Swal.fire({
-          position: "top-center",
-          icon: "error",
-          title: res.data.message,
-          showConfirmButton: true,
-          timer: 3000,
-        });
+        } else {
+          Swal.fire({
+            position: "top-center",
+            icon: "error",
+            title: res.data.message,
+            showConfirmButton: true,
+            timer: 3000,
+          });
         }
       } catch (err) {
         Swal.fire({

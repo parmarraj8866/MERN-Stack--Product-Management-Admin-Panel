@@ -9,7 +9,9 @@ export default function SubCategoryList(props) {
   const URL = import.meta.env.VITE_SUBCATEGORY_URL;
 
   const [SubCate, setSubCate] = useState([]);
+
 console.log(SubCate)
+
   async function ShowData() {
     const res = await axios.get(URL);
     setSubCate(res.data.records);
@@ -76,14 +78,14 @@ console.log(SubCate)
                   <td>{ele.createdAt ? new Date(ele.createdAt).toLocaleString() : "-"}</td>
                   <td className="text-center">
                     <NavLink
-                      to={`/subcategory/${ele.id}`}
+                      to={`/subcategory/${ele._id}`}
                       className="btn btn-sm btn-outline-warning me-2"
                     >
                       <AiFillEdit className="fs-4" />
                     </NavLink>
                     <button
                       className="btn btn-sm btn-outline-danger"
-                      onClick={() => Trash(ele.id)}
+                      onClick={() => Trash(ele._id)}
                     >
                       <AiFillDelete className="fs-4" />
                     </button>
