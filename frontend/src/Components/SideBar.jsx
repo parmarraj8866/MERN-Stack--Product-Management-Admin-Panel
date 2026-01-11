@@ -7,33 +7,23 @@ import { NavLink } from "react-router-dom";
 const SideMenuBar = () => {
   return (
     <>
-      <div
-        className="position-fixed top-0 start-0 text-white"
-        style={{
-          width: "280px",
-          height: "100vh",
-          backgroundColor: "rgba(10, 25, 47, 0.95)",
-          borderRight: "1px solid rgba(92, 99, 109, 0.95)",
-        }}
-      >
+      <div className="position-fixed sidebarmenu top-0 start-0 text-white">
         <div
-          className="d-flex  py-3 px-4 text-light fs-5"
+          className="d-flex align-items-center  py-3 px-4 text-light fs-5"
           style={{ borderBottom: "1px solid rgba(92, 99, 109, 0.95)" }}
         >
-          <NavLink to="/DashboardView" className='text-white'><SiSecurityscorecard className="fs-1" /></NavLink>
-          <div className="mt-1 mx-2">
-            <NavLink to="/DashboardView" className="fw-medium text-decoration-none text-white">CORE</NavLink>
-            <span className="fs-6 fw-medium">UI </span>
-            <NavLink to="/DashboardView"
-              className="fw-normal text-decoration-none"
-              style={{
-                color: "rgba(72, 93, 196, 0.95) ",
-                letterSpacing: "0.7px",
-              }}
-            >
-              REACT.JS
-            </NavLink>
-          </div>
+          <NavLink to="/DashboardView" className="text-white me-1">
+            <SiSecurityscorecard className=" sidebaricon" />
+          </NavLink>
+          <NavLink
+            to="/DashboardView"
+            className="fw-normal text-decoration-none sidebartitle"
+            style={{
+              color: "rgba(72, 93, 196, 0.95) ",
+            }}
+          >
+          DASHBOARD
+          </NavLink>
         </div>
 
         <div className="px-2">
@@ -48,7 +38,7 @@ const SideMenuBar = () => {
             Dashboard
           </NavLink>
         </div>
-        <p className="text-secondary text-uppercase mb-3 mx-4 mt-4 fw-bold fs-6">
+        <p className="text-secondary text-uppercase mb-3 mx-4 mt-4 fw-bold ">
           Components
         </p>
 

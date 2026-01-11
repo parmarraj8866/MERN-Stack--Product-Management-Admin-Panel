@@ -12,14 +12,8 @@ export default function DashboardHome() {
   const [Product, setProduct] = useState([]);
   const redirect = useNavigate();
 
-  console.log(Cate);
-  console.log(SubCate);
-  console.log(Product);
-
   const CateURL = import.meta.env.VITE_CATEGORY_URL;
-
   const SubCateURL = import.meta.env.VITE_SUBCATEGORY_URL;
-
   const ProURL = import.meta.env.VITE_PRODUCT_URL;
 
   async function ShowCategoryCount() {
@@ -107,16 +101,19 @@ export default function DashboardHome() {
         }}
       >
         <div className="text-center mb-5 mt-3">
-          <h1 className="fw-semibold text-light">Dashboard View</h1>
+          <h1 className="fw-semibold text-light dashhome">Dashboard View</h1>
         </div>
 
-        <div className="row justify-content-center g-4">
+        <div
+          className="row justify-content-center g-4 dashview"
+          style={{ width: "100%", height: "500px" }}
+        >
           {stats.map((item, index) => (
             <div
-              className="col-12 col-sm-6 col-md-3"
+              className="col-12 col-sm-7 col-md-5 col-lg-3"
               onClick={() => redirect(`/${item.loc}`)}
               key={index}
-               style={{cursor : "pointer"}}
+              style={{ cursor: "pointer" }}
             >
               <div
                 className="card text-center p-4 border-0 rounded-2 shadow-sm stat-card"

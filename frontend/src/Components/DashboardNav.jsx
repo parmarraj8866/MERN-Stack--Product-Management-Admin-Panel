@@ -2,34 +2,33 @@ import React from "react";
 import { FaBars } from "react-icons/fa";
 import { BsMoon } from "react-icons/bs";
 import { NavLink, useNavigate } from "react-router-dom";
-import { deleteUser } from "firebase/auth";
-import auth from "../../firestore";
+
 import Swal from "sweetalert2";
+import axios from "axios";
 
 export default function Dashboard(props) {
-  let redirect = useNavigate();
+  const redirect = useNavigate();
+  const Logout_URL = import.meta.env.VITE_USER_AUTH;
 
-  function logOutUser() {
-    try {
-      const user = auth.currentUser;
-      deleteUser(user);
-      redirect("/");
+  async function logout() {
+    const res = await axios.get(`${Logout_URL}/logout`);
+    if (res.data.success) {
       Swal.fire({
-        title: "👋 Logged Out!",
-        text: "You have been logged out successfully.",
+        position: "top-center",
         icon: "success",
-        confirmButtonColor: "#3085d6",
-        timer: 2000,
-        showConfirmButton: false,
+        title: res.data.message,
+        showConfirmButton: true,
+        timer: 3000,
       });
-    } catch {
+
+      redirect("/")
+    } else {
       Swal.fire({
-        title: "⚠️ Logout Failed!",
-        text: "Something went wrong while logging out.",
+        position: "top-center",
         icon: "error",
-        confirmButtonColor: "#d33",
-        timer: 2500,
-        showConfirmButton: false,
+        title: res.data.message,
+        showConfirmButton: true,
+        timer: 3000,
       });
     }
   }
@@ -37,19 +36,19 @@ export default function Dashboard(props) {
     <>
       <section>
         <div
-          className="d-flex justify-content-between"
+          className="d-flex justify-content-between align-items-center flex-wrap pb-2"
           style={{
             backgroundColor: "rgba(10, 25, 47, 0.95)",
             borderBottom: "1px solid rgba(92, 99, 109, 0.95)",
           }}
         >
           <div
-            className="d-flex align-items-center mx-4"
+            className="d-flex align-items-center"
             style={{ paddingTop: "17px", paddingBottom: "17px" }}
           >
             <NavLink to="/DashboardView">
               {" "}
-              <FaBars className="text-secondary  mx-3 mt- fs-45" />
+              <FaBars className="text-secondary  mx-2 mt- fs-45" />
             </NavLink>
             <NavLink
               to="/DashboardView"
@@ -59,7 +58,7 @@ export default function Dashboard(props) {
             </NavLink>
           </div>
 
-          <div className="d-flex justify-content-center align-items-center gap-3 mx-4">
+          <div className="d-flex justify-content-center align-items-center gap-3 mx-1">
             <div
               style={{
                 width: "1.5px",
@@ -78,7 +77,7 @@ export default function Dashboard(props) {
                 backgroundColor: "rgba(48, 62, 80, 0.95)",
               }}
             ></div>
-            <button className="btn btn-danger" onClick={logOutUser}>
+            <button className="btn btn-danger" onClick={() => logout()}>
               Logout
             </button>
           </div>

@@ -1,4 +1,4 @@
-function sendMail(otp) {
+function MailSendUI(otp) {
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -116,4 +116,4 @@ function sendMail(otp) {
 }
 
 
-module.exports = sendMail
+module.exports = MailSendUI

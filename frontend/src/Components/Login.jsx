@@ -1,89 +1,92 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
-import auth from "../../firestore";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import axios from "axios";
 import Swal from "sweetalert2";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  let redirect = useNavigate();
+  const { register, handleSubmit, reset } = useForm();
+  const URL = import.meta.env.VITE_USER_AUTH;
+  const redirect = useNavigate();
 
-  async function loginUser(e) {
-    e.preventDefault();
+  async function login(data) {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      redirect("/DashboardView");
+      const res = await axios.post(`${URL}/signin`, data);
+      if (!res.data.success) {
+        Swal.fire({
+          position: "top-center",
+          icon: "error",
+          title: res.data.message,
+          showConfirmButton: true,
+          timer: 3000,
+        });
+      } else {
+        Swal.fire({
+          position: "top-center",
+          icon: "success",
+          title: res.data.message,
+          showConfirmButton: true,
+          timer: 3000,
+        });
+        redirect("/DashboardView");
+        reset();
+      }
+    } catch (error) {
       Swal.fire({
-        title: "✅ Login Successful!",
-        text: "Welcome back! You are now logged in.",
+        position: "top-center",
         icon: "success",
-        
-        confirmButtonColor: "#3085d6",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-    } catch {
-      Swal.fire({
-        title: "❌ Login Failed!",
-        text: "Invalid email or password. Please try again.",
-        icon: "error",
-        confirmButtonColor: "#d33",
-        timer: 2500,
-        showConfirmButton: false,
+        title: error.message,
+        showConfirmButton: true,
+        timer: 3000,
       });
     }
   }
 
   return (
-    <div
-      className=" d-flex justify-content-center align-items-center w-75"
-      style={{ height: "100vh" }}
-    >
-      <form
-        className=" p-5 rounded-2 w-50"
-        style={{ backgroundColor: "rgba(13, 27, 48, 0.95)" }}
-        onSubmit={loginUser}
-      >
-        <h2 className="text-white text-center mb-3">Login </h2>
+    <div className="container min-vh-100 d-flex justify-content-center align-items-center">
+      <div className="row w-100 justify-content-center">
+        <div className="col-md-5">
+          <div className="card shadow">
+            <div className="text-dark pt-4 text-center">
+              <h4>Login Account</h4>
+            </div>
 
-        <div className=" mb-2">
-          <label className="form-label text-white">Email : </label>
+            <div className="card-body">
+              <form onSubmit={handleSubmit(login)}>
+                <div className="mb-3">
+                  <label className="fw-bold">Email :</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    placeholder="Enter Your Email..."
+                    {...register("email")}
+                  />
+                </div>
 
-          <input
-            type="text"
-            placeholder="Enter Email"
-            className="form-control "
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-          />
-        </div>
-        <div className=" mb-4">
-          <label className="form-label text-white">Password : </label>
+                <div className="mb-3">
+                  <label className="fw-bold">Password :</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Enter Your Password..."
+                    {...register("password")}
+                  />
+                </div>
 
-          <input
-            type="text"
-            placeholder="Enter Password"
-            className="form-control "
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
+                <div className="d-flex align-items-center">
+                  <button type="submit" className="btn btn-primary w-25 me-3">
+                    Login
+                  </button>
+
+                  <NavLink to={"/"} className="">
+                    Create Account
+                  </NavLink>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-        <div className="mb-2 text-center">
-          <button
-            className="btn text-white w-50"
-            style={{ backgroundColor: "rgba(7, 50, 110, 0.95)" }}
-          >
-            Login
-          </button>
-        </div>
-        <div className="d-flex justify-content-center align-items-center gap-1">
-          <h6 className="text-white">Don't have an account?</h6>
-          <NavLink to="/" className="mb-2">
-            Register
-          </NavLink>
-        </div>
-      </form>
+      </div>
     </div>
   );
 }

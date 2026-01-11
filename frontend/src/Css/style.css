@@ -5,6 +5,25 @@
   background-color: rgba(70, 84, 100, 0.95) !important;
 }
 
+.sidebarmenu {
+  width: 280px;
+  height: 100vh;
+  background-color: rgba(10, 25, 47, 0.95);
+  border-right: 1px solid rgba(92, 99, 109, 0.95);
+}
+
+.appSection {
+  margin-left: 280px;
+}
+
+.sidebaricon {
+  font-size: 30px;
+}
+
+.sidebarmenu p {
+  font-size: 18px;
+}
+
 .accordion-body ul li a,
 .submenu-link {
   display: flex;
@@ -101,4 +120,51 @@
   }
 }
 
+@media (min-width: 485px) and (max-width: 700px) {
+  .sidebarmenu {
+    width: 200px;
+    height: 100vh;
+  }
 
+  .appSection {
+    margin-left: 200px;
+  }
+
+  .dashview{
+    overflow: scroll;
+  }
+}
+
+@media (min-width: 0px) and (max-width: 485px) {
+  .sidebarmenu {
+    width: 140px;
+    height: 100vh;
+  }
+
+  .sidebartitle {
+    font-size: 15px;
+    margin-top: 5px;
+  }
+
+  .sidebaricon {
+    font-size: 20px;
+  }
+
+  .appSection {
+    margin-left: 140px;
+  }
+
+  .sidebarmenu p {
+    font-size: 14px;
+  }
+
+  .dashhome {
+    font-size: 20px;
+  }
+  .accordion span {
+    font-size: 13px;
+  }
+    .dashview{
+    overflow: scroll;
+  }
+}

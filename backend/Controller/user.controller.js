@@ -1,86 +1,127 @@
-const { sendMailer } = require("../Config/mailer")
-const User = require("../Model/user.model")
-const { createModel, existModel } = require("../utils/commonModel")
-const { PlainToHash, HashToPlain } = require("../utils/password")
-const otpGenerator = require("otp-generator")
-const sendMail = require("../utils/sendMail")
-const jwt = require("jsonwebtoken")
-
+const User = require("../Model/user.model");
+const { PlainToHash, HashToPlain } = require("../utils/password");
+const otpGenerator = require("otp-generator");
+const MailSendUI = require("../utils/MailSendUI");
+const { sendMailer } = require("../Config/mailer");
 
 exports.signup = async (req, res) => {
-    const { name, email, password, mobile } = req.body
-    const hash_pass = await PlainToHash(password)
+  try {
+    const { name, email, password, mobile } = req.body;
 
-    const otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false })
-
-
-    const user = await createModel(User, { name, email, password: hash_pass, mobile, otp }, "User Signup Successfully!")
-
-    if (user) {
-        await sendMailer(email, "Verify Your Email", sendMail(otp))
+    const oldUser = await User.findOne({ email });
+    if (oldUser) {
+      return res.json({
+        success: false,
+        message: "Email already exists"
+      });
     }
 
+    const hash_pass = await PlainToHash(password);
+
+    const otp = otpGenerator.generate(6, {
+      upperCaseAlphabets: false,
+      specialChars: false,
+    });
+
+    const user = await User.create({
+      name,
+      email,
+      password: hash_pass,
+      mobile,
+      otp,
+      verify: false
+    });
+
+    await sendMailer(email, "Verify Your Email", MailSendUI(otp));
+
     res.json({
-        success: true,
-        user
-    })
-}
+      success: true,
+      message: "Signup successfully, OTP sent to email",
+      user
+    });
+
+  } catch (err) {
+    res.json({
+      success: false,
+      message: err.message
+    });
+  }
+};
 
 exports.verifyOtp = async (req, res) => {
-    const { otp } = req.body
+  try {
+    const { otp } = req.body;
 
-    const matchOtp = await User.findOne({ otp })
+    const user = await User.findOne({ otp });
 
-    if (!matchOtp) {
-        return res.json({
-            success: false,
-            message: "Otp Not Match!"
-        })
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "OTP not matched"
+      });
     }
 
-    await User.findByIdAndUpdate({ _id: matchOtp._id }, { otp: "", verify: true })
+    await User.findByIdAndUpdate(user._id, { otp: "", verify: true })
 
     res.json({
-        success: true,
-        message: "Your Account is Verify!"
-    })
-}
+      success: true,
+      message: "Your account is verified"
+    });
+
+  } catch (err) {
+    res.json({
+      success: false,
+      message: err.message
+    });
+  }
+};
 
 exports.signin = async (req, res) => {
-    const { email, password } = req.body
+  try {
+    const { email, password } = req.body;
 
-    const match = await existModel(User, { email, verify: true }, "Email Id not Exist!")
+    const user = await User.findOne({ email, verify: true });
 
-    const { _id: id, email: u_email } = match.records
 
-    if (match.success) {
-        const hash_pass = match.records.password
-        const matchPass = await HashToPlain(password, hash_pass)
-
-        if (!matchPass) {
-            res.json({
-                success: false,
-                message: "Password Not Match!"
-            })
-        }
-
-        const payload = {
-            id, u_email
-        }
-
-        const secretkey = process.env.SECRET_KEY
-
-        const token = jwt.sign(payload, secretkey, { expiresIn: "1h" })
-
-        res
-            .header({ token })
-            .json({
-                success: true,
-                message: "Login Successfully!",
-                token
-            })
-
-    } else {
-        res.json(match)
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "Email not found or not verified"
+      });
     }
+
+    const matchPass = await HashToPlain(password, user.password);
+
+    if (!matchPass) {
+      return res.json({
+        success: false,
+        message: "Password not matched"
+      });
+    }
+
+    req.session.user = {
+      id: user._id,
+      email: user.email
+    };
+
+    res.json({
+      success: true,
+      message: "Login successfully"
+    });
+
+  } catch (err) {
+    res.json({
+      success: false,
+      message: err.message
+    });
+  }
+};
+
+exports.logout = async (req, res) => {
+  req.session = null
+
+  res.json({
+    success: true,
+    message: "You are Successfully Logout!"
+  })
 }

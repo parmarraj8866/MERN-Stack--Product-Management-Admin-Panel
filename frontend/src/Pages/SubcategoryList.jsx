@@ -73,7 +73,7 @@ console.log(SubCate)
                   key={index}
                 >
                   <th scope="row">{index + 1}</th>
-                  <td>{ele.category_id.name}</td>
+                  <td>{ele?.category_id?.name}</td>
                   <td>{ele.sub_name}</td>
                   <td>{ele.createdAt ? new Date(ele.createdAt).toLocaleString() : "-"}</td>
                   <td className="text-center">

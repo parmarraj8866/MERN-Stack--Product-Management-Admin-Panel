@@ -1,101 +1,115 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
-import auth from "../../firestore";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import axios from "axios";
 import Swal from "sweetalert2";
 
 export default function RegisterForm() {
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const { register, handleSubmit, reset } = useForm();
+  const URL = import.meta.env.VITE_USER_AUTH;
+  const redirect = useNavigate();
 
-  let redirect = useNavigate();
-
-  async function registerUser(e) {
-    e.preventDefault();
+  async function signup(data) {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      Swal.fire({
-        title: "🎉 Registered Successfully!",
-        text: "Your account has been created successfully.",
-        icon: "success",
-        
-        confirmButtonColor: "#3085d6",
-        timer: 2000,
-        showConfirmButton: false,
+      const res = await axios.post(`${URL}/signup`, data, {
+        withCredentials: true,
       });
 
-      redirect("/DashboardView");
-    } catch {
+      console.log(res)
+      if (!res.data.success) {
+        Swal.fire({
+          position: "top-center",
+          icon: "error",
+          title: res.data.message,
+          showConfirmButton: true,
+          timer: 3000,
+        });
+      } else {
+        Swal.fire({
+          position: "top-center",
+          icon: "success",
+          title: res.data.message,
+          showConfirmButton: true,
+          timer: 3000,
+        });
+        redirect("/verifyotp");
+        reset();
+      }
+    } catch (error) {
       Swal.fire({
-        title: "❌ Registration Failed!",
-        text: "Something went wrong while creating your account.",
-        icon: "error",
-        confirmButtonColor: "#d33",
-        timer: 2500,
-        showConfirmButton: false,
+        position: "top-center",
+        icon: "success",
+        title: error.message,
+        showConfirmButton: true,
+        timer: 3000,
       });
     }
   }
 
   return (
-    <div
-      className=" d-flex justify-content-center align-items-center w-75"
-      style={{ height: "100vh" }}
-    >
-      <form
-        className=" p-5 rounded-2 w-50"
-        style={{ backgroundColor: "rgba(13, 27, 48, 0.95)" }}
-        onSubmit={registerUser}
-      >
-        <h2 className="text-white mb-3 text-center">Register </h2>
-        <div className=" mb-2">
-          <label className="form-label text-white">Username : </label>
-          <input
-            type="text"
-            placeholder="Enter Username"
-            className="form-control"
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-          />
-        </div>
-        <div className=" mb-2">
-          <label className="form-label text-white">Email : </label>
+    <div className="container min-vh-100 d-flex justify-content-center align-items-center">
+      <div className="row w-100 justify-content-center">
+        <div className="col-md-6">
+          <div className="card shadow">
+            <div className="text-dark pt-4 text-center">
+              <h4>Register Account</h4>
+            </div>
 
-          <input
-            type="email"
-            placeholder="Enter Email"
-            className="form-control "
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-          />
-        </div>
-        <div className=" mb-4">
-          <label className="form-label text-white">Password : </label>
+            <div className="card-body">
+              <form onSubmit={handleSubmit(signup)}>
+                <div className="mb-3">
+                  <label className="fw-bold ">Name : </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter Your Name..."
+                    {...register("name")}
+                  />
+                </div>
 
-          <input
-            type="password"
-            placeholder="Enter Password"
-            className="form-control "
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
+                <div className="mb-3">
+                  <label className="fw-bold ">Email : </label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    placeholder="Enter Your Email..."
+                    {...register("email")}
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="fw-bold ">Password : </label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Enter Your Password..."
+                    {...register("password")}
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="fw-bold ">Mobile : </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter Your Mobile..."
+                    {...register("mobile")}
+                  />
+                </div>
+
+                <div className=" d-flex justify-content- align-items-center">
+                  <button type="submit" className="btn  btn-primary w-25 me-3">
+                    Register
+                  </button>
+                  <NavLink to={"/login"} className="">
+                    Login
+                  </NavLink>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-        <div className="mb-2 text-center">
-          <button
-            className="btn text-white w-50 "
-            style={{ backgroundColor: "rgba(7, 50, 110, 0.95)" }}
-          >
-            Register
-          </button>
-        </div>
-        <div className="d-flex justify-content-center align-items-center gap-1">
-          <h6 className="text-white">Already have an account?</h6>
-          <NavLink to="/login" className="mb-2">
-            Login
-          </NavLink>
-        </div>
-      </form>
+      </div>
     </div>
   );
 }
