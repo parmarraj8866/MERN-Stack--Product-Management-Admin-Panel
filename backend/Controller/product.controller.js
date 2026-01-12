@@ -2,10 +2,12 @@ const Product = require("../Model/product.model");
 const { createModel, viewMorePopulateModel, updateModel, trashModel } = require("../utils/commonModel");;
 
 exports.store = async (req, res) => {
-  const { category_id, subcategory_id, p_name, p_price, status } = req.body;
+  const { category_id, subcategory_id, p_name, p_price } = req.body;
+
+  const p_image = req?.file?.filename
   const result = await createModel(
     Product,
-    { category_id, subcategory_id, p_name, p_price, status, p_image: req?.file?.filename },
+    { category_id, subcategory_id, p_name, p_price, p_image },
     "Product Added"
   );
   res.json(result)
@@ -19,8 +21,9 @@ exports.index = async (req, res) => {
 exports.productUpdate = async (req, res) => {
   const { id } = req.params
   const { category_id, subcategory_id, p_name, p_price } = req.body
+  const p_image = req?.file?.filename
 
-  const product = await updateModel(Product, id, { category_id, subcategory_id, p_name, p_price }, "Product Updated!")
+  const product = await updateModel(Product, id, { category_id, subcategory_id, p_name, p_price, p_image }, "Product Updated!")
 
   res.json({
     product

@@ -4,6 +4,10 @@ const dotenv = require('dotenv').config()
 const dbConfig = require("./Config/db")
 const cors = require("cors")
 const session = require("cookie-session")
+const path = require("path")
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")))
+
 
 dbConfig()
 const port = process.env.PORT || 8000;

@@ -24,13 +24,15 @@ export default function ProductAdd() {
   //  Product URL
   async function ShowData() {
     const res = await axios.get(`${URL}/${id}`);
-    console.log("Product BY ", res.data.product);
-
+    
+    
     const product = res.data.product;
+    console.log("Product BY ", product);
     reset({
       ...product,
       category_id: product.category_id._id,
       subcategory_id: product.subcategory_id._id,
+      p_image : product.p_image
     });
   }
 
@@ -46,8 +48,17 @@ export default function ProductAdd() {
   }, []);
 
   async function addProduct(data) {
+    console.log(data);
+    const formData = new FormData();
+
+    formData.append("category_id", data.category_id);
+    formData.append("subcategory_id", data.subcategory_id);
+    formData.append("p_name", data.p_name);
+    formData.append("p_price", data.p_price);
+    formData.append("p_image", data.p_image[0]);
+
     if (id == null) {
-      const res = await axios.post(URL, { CreateDate, ...data });
+      const res = await axios.post(URL, formData);
       console.log(res);
       reset({
         ProductCategory: "--Select Category--",
@@ -116,8 +127,8 @@ export default function ProductAdd() {
             --Select Category--
           </option>
           {ProductSubCate.map((ele, index) => (
-            <option key={index} value={ele.category_id._id}>
-              {ele.category_id.name}
+            <option key={index} value={ele?.category_id?._id}>
+              {ele?.category_id?.name}
             </option>
           ))}
         </select>
@@ -182,6 +193,25 @@ export default function ProductAdd() {
             border: "1px solid rgba(92, 99, 109, 0.95)",
           }}
           {...register("p_price")}
+          required
+        />
+      </div>
+
+      <div className="mx-3 mb-2">
+        <label className="form-label  text-secondary fw-bold  pt-2">
+          Product Image
+        </label>
+        <input
+          type="file"
+          className="form-control custom-input"
+          placeholder="Upload Product Image"
+          accept="image/*"
+          style={{
+            backgroundColor: "rgba(10, 25, 47, 0.95)",
+            color: "white",
+            border: "1px solid rgba(92, 99, 109, 0.95)",
+          }}
+          {...register("p_image")}
           required
         />
       </div>

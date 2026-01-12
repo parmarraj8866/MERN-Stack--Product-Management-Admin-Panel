@@ -8,28 +8,28 @@ import Swal from "sweetalert2";
 export default function ProductList(props) {
   const [Product, setProduct] = useState([]);
 
-  console.log("Product", Product)
+  console.log("Product", Product);
 
   const URL = import.meta.env.VITE_PRODUCT_URL;
-  
+
   async function showData() {
     const res = await axios.get(URL);
-    if(res){
+    if (res) {
       setProduct(res.data.records);
     }
   }
 
-  console.log(Product)
+  console.log(Product);
 
- function Trash(id){
-     Swal.fire({
+  function Trash(id) {
+    Swal.fire({
       title: "Do You Want to Delete Product?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: " Delete",
-    }).then(async(result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         Swal.fire({
           title: "Product Deleted!",
@@ -46,8 +46,7 @@ export default function ProductList(props) {
     });
   }
 
-
-  console.log(Product)
+  console.log(Product);
 
   useEffect(() => {
     showData();
@@ -69,31 +68,56 @@ export default function ProductList(props) {
               <th scope="col">Category</th>
               <th scope="col">Sub Category</th>
               <th scope="col">Product Name</th>
+              <th scope="col">Product Image</th>
               <th scope="col">Product Price(₹)</th>
               <th scope="col">Create At</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody >
             {Product.map((ele, index) => {
               return (
                 <tr
-                  className="text-center"
+                  className="text-center "
                   style={{ backgroundColor: "transparent" }}
                 >
-                  <th scope="row">{index + 1  }</th>
+                  <th scope="row">{index + 1}</th>
 
                   <td>{ele?.category_id?.name}</td>
                   <td>{ele?.subcategory_id?.sub_name}</td>
                   <td>{ele.p_name}</td>
+                  <td
+                    style={{ width: "80px", height: "80px" }}
+                  >
+                    <img
+                      src={`${import.meta.env.VITE_PRODUCT_IMAGE_URL}/${
+                        ele.p_image
+                      }`}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
+                      }}
+                      alt="Image not found"
+                    />
+                  </td>
                   <td>₹{ele.p_price}</td>
-                  <td>{ele.createdAt ? new Date(ele.createdAt).toLocaleString() : "-"}</td>
+                  <td>
+                    {ele.createdAt
+                      ? new Date(ele.createdAt).toLocaleString()
+                      : "-"}
+                  </td> 
                   <td className="text-center">
-                    <NavLink to={`/product/${ele._id}`} className="btn btn-sm btn-outline-warning me-2">
+                    <NavLink
+                      to={`/product/${ele._id}`}
+                      className="btn btn-sm btn-outline-warning me-2"
+                    >
                       <AiFillEdit className="fs-4" />
                     </NavLink>
-                    <button className="btn btn-sm btn-outline-danger"
-                    onClick={()=> Trash(ele._id)}>
+                    <button
+                      className="btn btn-sm btn-outline-danger"
+                      onClick={() => Trash(ele._id)}
+                    >
                       <AiFillDelete className="fs-4" />
                     </button>
                   </td>

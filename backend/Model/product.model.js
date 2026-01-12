@@ -17,8 +17,13 @@ const productSchema = new Schema(
       ...commonString,
       required: false
     },
+    p_image: {
+      ...commonString,
+      required: false
+    },
     status: {
       type: Boolean,
+      required: false,
       default: true,
     },
   },
