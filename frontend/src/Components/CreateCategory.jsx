@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../utils/axiosConfig";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
@@ -13,15 +13,15 @@ export default function CreateCategory() {
   const CreateDate =
     date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
 
-  const { id } = useParams();  // Only Use in Params id
-  console.log(id)
+  const { id } = useParams(); // Only Use in Params id
+  console.log(id);
 
   // const [searchParams] = useSearchParams(); // Use in query id
   // const id = searchParams.get("id");
 
   async function ShowData() {
-    const res = await axios.get(`${URL}/${id}`);
-    console.log("res ok", res.data)
+    const res = await axios.get(`${URL}/${id}`, { withCredentials: true });
+    console.log("res ok", res.data);
     reset(res.data.category);
   }
 
@@ -32,7 +32,11 @@ export default function CreateCategory() {
   async function addcategory(data) {
     if (id == null) {
       try {
-        const res = await axios.post(URL, { CreateDate, ...data });
+        const res = await axios.post(
+          URL,
+          { CreateDate, ...data },
+          { withCredentials: true },
+        );
         if (res.data.success) {
           reset();
           redirect("/categoryView");
@@ -62,7 +66,11 @@ export default function CreateCategory() {
         });
       }
     } else {
-      await axios.put(`${URL}/${id}`, { updateDate: CreateDate, ...data });
+      await axios.put(
+        `${URL}/${id}`,
+        { updateDate: CreateDate, ...data },
+        { withCredentials: true },
+      );
       reset();
       redirect("/categoryView");
       Swal.fire({

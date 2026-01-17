@@ -8,7 +8,7 @@ router
     .post(upload.single('p_image'), store)
     .get(index)
 
-router.put("/:id", productUpdate)
+router.put("/:id",upload.single('p_image'), productUpdate)
 router.delete("/:id", productTrash)
 router.get("/:id", productSingle)
 

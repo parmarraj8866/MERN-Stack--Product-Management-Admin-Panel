@@ -87,16 +87,16 @@ exports.existModel = async (Model, field, message) => {
     }
 }
 
-exports.updateModel = async (Model, id, field, message) => {
-    const records = await Model.findByIdAndUpdate(id, field)
-    return {
-        success: true,
-        message
+    exports.updateModel = async (Model, id, field, message) => {
+        const records = await Model.findByIdAndUpdate(id, field)
+        return {
+            success: true,
+            message
+        }
     }
-}
 
 
-exports.trashModel = async (Model, id, message) => {
+    exports.trashModel = async (Model, id, message) => {
     await Model.findByIdAndDelete(id)
 
     return {

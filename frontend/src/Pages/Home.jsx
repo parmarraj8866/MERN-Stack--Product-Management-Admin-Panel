@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../utils/axiosConfig";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaFolderOpen, FaBoxOpen } from "react-icons/fa";
 import { BiGitBranch } from "react-icons/bi";
@@ -18,7 +18,7 @@ export default function DashboardHome() {
 
   async function ShowCategoryCount() {
     try {
-      const res = await axios.get(CateURL);
+      const res = await axios.get(CateURL, { withCredentials: true });
       setCate(res.data.records);
     } catch (err) {
       console.error("Error fetching categories:", err);
@@ -27,7 +27,7 @@ export default function DashboardHome() {
 
   async function ShowSubCategoryCount() {
     try {
-      const res = await axios.get(SubCateURL);
+      const res = await axios.get(SubCateURL, { withCredentials: true });
       setSubCate(res.data.records);
     } catch (err) {
       console.error("Error fetching subcategories:", err);
@@ -36,7 +36,7 @@ export default function DashboardHome() {
 
   async function ShowProductCount() {
     try {
-      const res = await axios.get(ProURL);
+      const res = await axios.get(ProURL, { withCredentials: true });
       setProduct(res.data.records);
     } catch (err) {
       console.error("Error fetching products:", err);

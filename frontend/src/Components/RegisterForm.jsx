@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../utils/axiosConfig";
 import Swal from "sweetalert2";
 
 export default function RegisterForm() {
@@ -15,7 +15,7 @@ export default function RegisterForm() {
         withCredentials: true,
       });
 
-      console.log(res)
+      console.log(res);
       if (!res.data.success) {
         Swal.fire({
           position: "top-center",

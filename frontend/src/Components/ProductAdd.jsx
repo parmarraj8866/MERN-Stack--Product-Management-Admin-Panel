@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../utils/axiosConfig";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -8,6 +8,7 @@ export default function ProductAdd() {
   const { register, handleSubmit, reset } = useForm();
 
   const [ProductSubCate, setProductSubCate] = useState([]);
+  const [image, setImage] = useState("");
 
   console.log("ProductSubCate", ProductSubCate);
 
@@ -23,22 +24,22 @@ export default function ProductAdd() {
 
   //  Product URL
   async function ShowData() {
-    const res = await axios.get(`${URL}/${id}`);
-    
-    
+    const res = await axios.get(`${URL}/${id}`, { withCredentials: true });
+
     const product = res.data.product;
     console.log("Product BY ", product);
+    setImage(product.p_image);
     reset({
       ...product,
       category_id: product.category_id._id,
       subcategory_id: product.subcategory_id._id,
-      p_image : product.p_image
+      p_image: image,
     });
   }
 
   // category url
   async function ShowDataSubCategory() {
-    const res = await axios.get(SubCateURL);
+    const res = await axios.get(SubCateURL, { withCredentials: true });
     setProductSubCate(res.data.records);
   }
 
@@ -47,6 +48,7 @@ export default function ProductAdd() {
     ShowDataSubCategory();
   }, []);
 
+  // add Product
   async function addProduct(data) {
     console.log(data);
     const formData = new FormData();
@@ -55,10 +57,11 @@ export default function ProductAdd() {
     formData.append("subcategory_id", data.subcategory_id);
     formData.append("p_name", data.p_name);
     formData.append("p_price", data.p_price);
+
     formData.append("p_image", data.p_image[0]);
 
     if (id == null) {
-      const res = await axios.post(URL, formData);
+      const res = await axios.post(URL, formData, { withCredentials: true });
       console.log(res);
       reset({
         ProductCategory: "--Select Category--",
@@ -81,7 +84,7 @@ export default function ProductAdd() {
         showConfirmButton: true,
         timer: 3000,
       });
-      await axios.put(`${URL}/${id}`, data);
+      await axios.put(`${URL}/${id}`, formData, { withCredentials: true });
       reset({
         ProductCategory: "--Select Category--",
         ProductSubCategory: "--Select Sub Category--",
@@ -197,6 +200,20 @@ export default function ProductAdd() {
         />
       </div>
 
+      {image && (
+        <div className="mx-3 mb-2 d-flex flex-column">
+          <label className="form-label  text-secondary fw-bold  pt-2">
+            Product Image Preview
+          </label>
+          <img
+            src={`${import.meta.env.VITE_PRODUCT_IMAGE_URL}/${image}`}
+            className="mx-1"
+            style={{ width: "100px", height: "100px", objectFit: "contain" }}
+            alt="not found image"
+          />
+        </div>
+      )}
+
       <div className="mx-3 mb-2">
         <label className="form-label  text-secondary fw-bold  pt-2">
           Product Image
@@ -212,7 +229,6 @@ export default function ProductAdd() {
             border: "1px solid rgba(92, 99, 109, 0.95)",
           }}
           {...register("p_image")}
-          required
         />
       </div>
 

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../utils/axiosConfig";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,21 +18,26 @@ export default function SubCategory() {
 
   // Sub Category
   async function ShowData() {
-    const res = await axios.get(`${URL}/${id}`);
+    const res = await axios.get(`${URL}/${id}`, { withCredentials: true });
     console.log("My Res", res.data.subCategory);
     reset(res.data.subCategory);
   }
 
   // Category
   async function ShowDataCateGory() {
-    const res = await axios.get(CATEURL);
-    setSubCate(res.data.records);
+    const res = await axios.get(CATEURL, {
+      withCredentials: true,
+    });
   }
 
-  // Sub Category Add and Update 
+  // Sub Category Add and Update
   async function addSubcategory(data) {
     if (id == null) {
-      const res = await axios.post(URL, { currentDate, ...data });
+      const res = await axios.post(
+        URL,
+        { currentDate, ...data },
+        { withCredentials: true },
+      );
       console.log("res", res);
       if (res.data.success) {
         Swal.fire({
@@ -57,7 +62,11 @@ export default function SubCategory() {
         });
       }
     } else {
-      await axios.put(`${URL}/${id}`, { currentDate, ...data });
+      await axios.put(
+        `${URL}/${id}`,
+        { currentDate, ...data },
+        { withCredentials: true },
+      );
       Swal.fire({
         position: "top-center",
         icon: "success",

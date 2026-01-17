@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../utils/axiosConfig";
 import React, { useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
@@ -10,17 +10,17 @@ export default function CategoryList(props) {
   const URL = import.meta.env.VITE_CATEGORY_URL;
 
   async function showData() {
-    const res = await axios.get(URL);
-    console.log(res)
+    const res = await axios.get(URL, { withCredentials: true });
+    console.log(res);
     setList(res.data.records);
   }
 
-  console.log(List)
+  console.log(List);
   useEffect(() => {
     showData();
   }, []);
 
- function Trash(id) {
+  function Trash(id) {
     Swal.fire({
       title: "Do You Want to Delete Category?",
       icon: "warning",
@@ -28,13 +28,13 @@ export default function CategoryList(props) {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Category Delete",
-    }).then(async(result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         Swal.fire({
           title: "Deleted!",
           icon: "success",
         });
-        await axios.delete(`${URL}/${id}`);
+        await axios.delete(`${URL}/${id}`, { withCredentials: true });
         showData();
       } else {
         Swal.fire({
@@ -76,7 +76,11 @@ export default function CategoryList(props) {
                   <th scope="row">{index + 1}</th>
                   <td>{ele.name}</td>
                   <td>{new Date(ele.createdAt).toLocaleString()}</td>
-                  <td>{ele.updatedAt ? new Date(ele.updatedAt).toLocaleString() : "-"}</td>
+                  <td>
+                    {ele.updatedAt
+                      ? new Date(ele.updatedAt).toLocaleString()
+                      : "-"}
+                  </td>
                   <td className="text-center">
                     <NavLink
                       className="btn btn-sm btn-warning me-2"

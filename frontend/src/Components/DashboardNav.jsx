@@ -4,14 +4,16 @@ import { BsMoon } from "react-icons/bs";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import Swal from "sweetalert2";
-import axios from "axios";
+import axios from "../utils/axiosConfig";
 
 export default function Dashboard(props) {
   const redirect = useNavigate();
   const Logout_URL = import.meta.env.VITE_USER_AUTH;
 
   async function logout() {
-    const res = await axios.get(`${Logout_URL}/logout`);
+    const res = await axios.get(`${Logout_URL}/logout`, {
+      withCredentials: true,
+    });
     if (res.data.success) {
       Swal.fire({
         position: "top-center",
@@ -21,7 +23,7 @@ export default function Dashboard(props) {
         timer: 3000,
       });
 
-      redirect("/")
+      redirect("/");
     } else {
       Swal.fire({
         position: "top-center",

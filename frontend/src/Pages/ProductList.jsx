@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../utils/axiosConfig";
 import { AiFillEdit } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
 import { NavLink } from "react-router-dom";
@@ -13,7 +13,7 @@ export default function ProductList(props) {
   const URL = import.meta.env.VITE_PRODUCT_URL;
 
   async function showData() {
-    const res = await axios.get(URL);
+    const res = await axios.get(URL, { withCredentials: true });
     if (res) {
       setProduct(res.data.records);
     }
@@ -35,7 +35,7 @@ export default function ProductList(props) {
           title: "Product Deleted!",
           icon: "success",
         });
-        await axios.delete(`${URL}/${id}`);
+        await axios.delete(`${URL}/${id}`, { withCredentials: true });
         showData();
       } else {
         Swal.fire({
@@ -74,7 +74,7 @@ export default function ProductList(props) {
               <th scope="col">Action</th>
             </tr>
           </thead>
-          <tbody >
+          <tbody>
             {Product.map((ele, index) => {
               return (
                 <tr
@@ -86,9 +86,7 @@ export default function ProductList(props) {
                   <td>{ele?.category_id?.name}</td>
                   <td>{ele?.subcategory_id?.sub_name}</td>
                   <td>{ele.p_name}</td>
-                  <td
-                    style={{ width: "80px", height: "80px" }}
-                  >
+                  <td style={{ width: "80px", height: "80px" }}>
                     <img
                       src={`${import.meta.env.VITE_PRODUCT_IMAGE_URL}/${
                         ele.p_image
@@ -106,7 +104,7 @@ export default function ProductList(props) {
                     {ele.createdAt
                       ? new Date(ele.createdAt).toLocaleString()
                       : "-"}
-                  </td> 
+                  </td>
                   <td className="text-center">
                     <NavLink
                       to={`/product/${ele._id}`}

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../utils/axiosConfig";
 import React, { useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
@@ -10,27 +10,27 @@ export default function SubCategoryList(props) {
 
   const [SubCate, setSubCate] = useState([]);
 
-console.log(SubCate)
+  console.log(SubCate);
 
   async function ShowData() {
-    const res = await axios.get(URL);
+    const res = await axios.get(URL, { withCredentials: true });
     setSubCate(res.data.records);
   }
-   function Trash(id) {
-     Swal.fire({
+  function Trash(id) {
+    Swal.fire({
       title: "Do You Want to Delete Sub-Category?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Delete",
-    }).then(async(result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         Swal.fire({
           title: "Sub-Category Deleted!",
           icon: "success",
         });
-        await axios.delete(`${URL}/${id}`);
+        await axios.delete(`${URL}/${id}`, { withCredentials: true });
         ShowData();
       } else {
         Swal.fire({
@@ -75,7 +75,11 @@ console.log(SubCate)
                   <th scope="row">{index + 1}</th>
                   <td>{ele?.category_id?.name}</td>
                   <td>{ele.sub_name}</td>
-                  <td>{ele.createdAt ? new Date(ele.createdAt).toLocaleString() : "-"}</td>
+                  <td>
+                    {ele.createdAt
+                      ? new Date(ele.createdAt).toLocaleString()
+                      : "-"}
+                  </td>
                   <td className="text-center">
                     <NavLink
                       to={`/subcategory/${ele._id}`}

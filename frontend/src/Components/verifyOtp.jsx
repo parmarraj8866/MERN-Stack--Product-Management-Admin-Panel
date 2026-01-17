@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../utils/axiosConfig";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -13,9 +13,11 @@ export default function VerifyOtp() {
   async function verifyOtp(data) {
     {
       try {
-        const res = await axios.post(`${URL}/verifyotp`, data);
+        const res = await axios.post(`${URL}/verifyotp`, data, {
+          withCredentials: true,
+        });
         console.log(res.data);
-        
+
         if (!res.data.success) {
           Swal.fire({
             position: "top-center",

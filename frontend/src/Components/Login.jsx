@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../utils/axiosConfig";
 import Swal from "sweetalert2";
 
 export default function LoginForm() {
@@ -11,7 +11,9 @@ export default function LoginForm() {
 
   async function login(data) {
     try {
-      const res = await axios.post(`${URL}/signin`, data);
+      const res = await axios.post(`${URL}/signin`, data, {
+        withCredentials: true,
+      });
       if (!res.data.success) {
         Swal.fire({
           position: "top-center",
