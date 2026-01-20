@@ -3,7 +3,7 @@ import axios from "../utils/axiosConfig";
 import { AiFillEdit } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
 import { NavLink } from "react-router-dom";
-import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 export default function ProductList(props) {
   const [Product, setProduct] = useState([]);
@@ -22,28 +22,27 @@ export default function ProductList(props) {
   console.log(Product);
 
   function Trash(id) {
-    Swal.fire({
-      title: "Do You Want to Delete Product?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: " Delete",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Product Deleted!",
-          icon: "success",
-        });
-        await axios.delete(`${URL}/${id}`, { withCredentials: true });
-        showData();
-      } else {
-        Swal.fire({
-          title: "Not Delete!",
-          icon: "success",
-        });
-      }
-    });
+    if (window.confirm("Do You Want to Delete Product?")) {
+      toast.success("Product Deleted!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      axios.delete(`${URL}/${id}`, { withCredentials: true });
+      showData();
+    } else {
+      toast.info("Not Delete!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
   }
 
   console.log(Product);

@@ -15,10 +15,23 @@ import "./Css/style.css";
 import RegisterForm from "./Components/RegisterForm";
 import LoginForm from "./Components/Login";
 import VerifyOtp from "./Components/verifyOtp";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<RegisterForm />} />

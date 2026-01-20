@@ -2,7 +2,7 @@ import axios from "../utils/axiosConfig";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 export default function ProductAdd() {
   const { register, handleSubmit, reset } = useForm();
@@ -69,20 +69,22 @@ export default function ProductAdd() {
         ProductName: "",
         ProductPrice: "",
       });
-      Swal.fire({
+      toast.success("Product Added!", {
         position: "top-center",
-        icon: "success",
-        title: "Product Added!",
-        showConfirmButton: true,
-        timer: 3000,
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       });
     } else {
-      Swal.fire({
+      toast.success("Product Updated!", {
         position: "top-center",
-        icon: "success",
-        title: "Product Updated!",
-        showConfirmButton: true,
-        timer: 3000,
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       });
       await axios.put(`${URL}/${id}`, formData, { withCredentials: true });
       reset({

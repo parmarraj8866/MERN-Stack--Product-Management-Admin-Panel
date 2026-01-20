@@ -61,7 +61,7 @@ exports.viewMorePopulateModel = async (Model, populateId1, selecteOption1, popul
         })
         .then((records) => ({
             success: true,
-            records: records.length > 0 ? records : [] // problem in Front-end side ---> "No Records Found!!"
+            records: records.length > 0 ? records : [] 
         })
         )
         .catch((err) => ({

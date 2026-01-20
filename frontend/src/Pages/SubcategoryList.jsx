@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
 import { NavLink } from "react-router-dom";
-import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 export default function SubCategoryList(props) {
   const URL = import.meta.env.VITE_SUBCATEGORY_URL;
@@ -17,28 +17,36 @@ export default function SubCategoryList(props) {
     setSubCate(res.data.records);
   }
   function Trash(id) {
-    Swal.fire({
-      title: "Do You Want to Delete Sub-Category?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Delete",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Sub-Category Deleted!",
-          icon: "success",
-        });
-        await axios.delete(`${URL}/${id}`, { withCredentials: true });
-        ShowData();
-      } else {
-        Swal.fire({
-          title: "Not Delete!",
-          icon: "success",
-        });
-      }
+    toast.info("Do You Want to Delete Sub-Category?", {
+      position: "top-center",
+      autoClose: false,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
     });
+
+    if (window.confirm("Do You Want to Delete Sub-Category?")) {
+      toast.success("Sub-Category Deleted!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      axios.delete(`${URL}/${id}`, { withCredentials: true });
+      ShowData();
+    } else {
+      toast.info("Not Delete!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
   }
 
   useEffect(() => {

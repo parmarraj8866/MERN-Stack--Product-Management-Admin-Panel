@@ -3,7 +3,7 @@ import { FaBars } from "react-icons/fa";
 import { BsMoon } from "react-icons/bs";
 import { NavLink, useNavigate } from "react-router-dom";
 
-import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 import axios from "../utils/axiosConfig";
 
 export default function Dashboard(props) {
@@ -15,22 +15,24 @@ export default function Dashboard(props) {
       withCredentials: true,
     });
     if (res.data.success) {
-      Swal.fire({
+      toast.success(res.data.message, {
         position: "top-center",
-        icon: "success",
-        title: res.data.message,
-        showConfirmButton: true,
-        timer: 3000,
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       });
 
       redirect("/");
     } else {
-      Swal.fire({
+      toast.error(res.data.message, {
         position: "top-center",
-        icon: "error",
-        title: res.data.message,
-        showConfirmButton: true,
-        timer: 3000,
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       });
     }
   }

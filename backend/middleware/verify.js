@@ -1,7 +1,7 @@
-// const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken")
 
 exports.verifyToken = (req, res, next) => {
-    const token = req.headers.authorization
+    const token = req.cookies.token;
     try {
 
         if (!token) {
@@ -11,10 +11,16 @@ exports.verifyToken = (req, res, next) => {
             })
         }
 
-        let newToken = token.slice(7)
-        // let newToken = token.split(" ")[1]
+        // 2 methods for Bearer token
+
+        // 1. // let newToken = token.slice(7)  
+        // 2. // let newToken = token.split(" ")[1]    
+
+        // const verifytoken = jwt.verify(newToken, secretkey)
+
+
         const secretkey = process.env.SECRET_KEY
-        const verifytoken = jwt.verify(newToken, secretkey)
+        const verifytoken = jwt.verify(token, secretkey)
 
         if (!verifytoken) {
             res.json({

@@ -5,8 +5,7 @@ const router = require('express').Router()
 
 router
     .route('/')
-    // .post(verifyToken, store)
-    .post(store)
+    .post(verifyToken, store)
     .get(index)
 router.put("/:id", updateCategory)
 router.delete("/:id", trashCategory)

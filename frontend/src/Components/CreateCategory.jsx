@@ -1,8 +1,8 @@
 import axios from "../utils/axiosConfig";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import Swal from "sweetalert2";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function CreateCategory() {
   const { register, handleSubmit, reset } = useForm();
@@ -14,15 +14,15 @@ export default function CreateCategory() {
     date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
 
   const { id } = useParams(); // Only Use in Params id
-  console.log(id);
 
   // const [searchParams] = useSearchParams(); // Use in query id
   // const id = searchParams.get("id");
 
   async function ShowData() {
-    const res = await axios.get(`${URL}/${id}`, { withCredentials: true });
-    console.log("res ok", res.data);
-    reset(res.data.category);
+    if (id) {
+      const res = await axios.get(`${URL}/${id}`, { withCredentials: true });
+      reset(res.data.category);
+    }
   }
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function CreateCategory() {
   }, [id]);
 
   async function addcategory(data) {
-    if (id == null) {
+    if (!id) {
       try {
         const res = await axios.post(
           URL,
@@ -40,29 +40,32 @@ export default function CreateCategory() {
         if (res.data.success) {
           reset();
           redirect("/categoryView");
-          Swal.fire({
+          toast.success("Category Added!", {
             position: "top-center",
-            icon: "success",
-            title: "Category Added!",
-            showConfirmButton: true,
-            timer: 3000,
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
           });
         } else {
-          Swal.fire({
+          toast.error(res.data.message, {
             position: "top-center",
-            icon: "error",
-            title: res.data.message,
-            showConfirmButton: true,
-            timer: 3000,
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
           });
         }
       } catch (err) {
-        Swal.fire({
+        toast.error(`Error : ${err.message}`, {
           position: "top-center",
-          icon: "success",
-          title: `Error : ${err.message}`,
-          showConfirmButton: true,
-          timer: 3000,
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
         });
       }
     } else {
@@ -73,12 +76,13 @@ export default function CreateCategory() {
       );
       reset();
       redirect("/categoryView");
-      Swal.fire({
+      toast.success("Category Updated!", {
         position: "top-center",
-        icon: "success",
-        title: "Category Updated!",
-        showConfirmButton: true,
-        timer: 3000,
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       });
     }
   }

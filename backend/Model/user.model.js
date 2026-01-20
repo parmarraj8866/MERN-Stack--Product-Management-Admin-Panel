@@ -15,11 +15,16 @@ const userSchema = new Schema({
         ...commonString,
         required: true
     },
-    otp : commonString,
-    verify : {
-        type : Boolean,
-        default :  false,
-        required : true
+    otp: commonString,
+    verify: {
+        type: Boolean,
+        default: false,
+        required: true
+    },
+    role: {
+        type: String,
+        enum: ["user", "admin", "staff"],
+        default: "user"
     }
 }, { timestamps: true })
 

@@ -2,7 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "../utils/axiosConfig";
-import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 export default function RegisterForm() {
   const { register, handleSubmit, reset } = useForm();
@@ -17,96 +17,240 @@ export default function RegisterForm() {
 
       console.log(res);
       if (!res.data.success) {
-        Swal.fire({
+        toast.error(res.data.message, {
           position: "top-center",
-          icon: "error",
-          title: res.data.message,
-          showConfirmButton: true,
-          timer: 3000,
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
         });
       } else {
-        Swal.fire({
+        toast.success(res.data.message, {
           position: "top-center",
-          icon: "success",
-          title: res.data.message,
-          showConfirmButton: true,
-          timer: 3000,
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
         });
         redirect("/verifyotp");
         reset();
       }
     } catch (error) {
-      Swal.fire({
+      toast.error(error.message, {
         position: "top-center",
-        icon: "success",
-        title: error.message,
-        showConfirmButton: true,
-        timer: 3000,
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       });
     }
   }
 
   return (
-    <div className="container min-vh-100 d-flex justify-content-center align-items-center">
-      <div className="row w-100 justify-content-center">
-        <div className="col-md-6">
-          <div className="card shadow">
-            <div className="text-dark pt-4 text-center">
-              <h4>Register Account</h4>
-            </div>
+    <div
+      className="min-vh-100 d-flex align-items-center justify-content-center p-3 p-md-0"
+      style={{ backgroundColor: "#f8f9fa" }}
+    >
+      <div className="w-100" style={{ maxWidth: "480px" }}>
+        <div className="text-center">
+          <div
+            className="mx-auto mb-1 d-flex align-items-center justify-content-center rounded-circle"
+            style={{
+              width: "70px",
+              height: "70px",
+              backgroundColor: "#28a745",
+              fontSize: "35px",
+            }}
+          >
+            📝
+          </div>
+          <h1 className="fw-bold text-dark mb-3" style={{ fontSize: "28px" }}>
+            Create Account
+          </h1>
+        </div>
 
-            <div className="card-body">
-              <form onSubmit={handleSubmit(signup)}>
-                <div className="mb-3">
-                  <label className="fw-bold ">Name : </label>
+        <div
+          className="card border-0 shadow-sm"
+          style={{ borderRadius: "12px" }}
+        >
+          <div className="card-body p-4 p-md-5">
+            <form onSubmit={handleSubmit(signup)}>
+              <div className="mb-2">
+                <label
+                  className="form-label fw-600 text-dark mb-2"
+                  style={{ fontSize: "14px" }}
+                >
+                  Full Name
+                </label>
+                <div
+                  className="input-group"
+                  style={{ borderRadius: "8px", overflow: "hidden" }}
+                >
+                  <span
+                    className="input-group-text bg-white border-end-0"
+                    style={{ borderColor: "#e0e0e0" }}
+                  >
+                    👤
+                  </span>
                   <input
                     type="text"
-                    className="form-control"
-                    placeholder="Enter Your Name..."
-                    {...register("name")}
+                    className="form-control border-start-0"
+                    placeholder="John Doe"
+                    {...register("name", { required: true })}
+                    style={{
+                      borderColor: "#e0e0e0",
+                      fontSize: "14px",
+                      padding: "10px 12px",
+                    }}
                   />
                 </div>
+              </div>
 
-                <div className="mb-3">
-                  <label className="fw-bold ">Email : </label>
+              <div className="mb-2">
+                <label
+                  className="form-label fw-600 text-dark mb-2"
+                  style={{ fontSize: "14px" }}
+                >
+                  Email Address
+                </label>
+                <div
+                  className="input-group"
+                  style={{ borderRadius: "8px", overflow: "hidden" }}
+                >
+                  <span
+                    className="input-group-text bg-white border-end-0"
+                    style={{ borderColor: "#e0e0e0" }}
+                  >
+                    ✉️
+                  </span>
                   <input
                     type="email"
-                    className="form-control"
-                    placeholder="Enter Your Email..."
-                    {...register("email")}
+                    className="form-control border-start-0"
+                    placeholder="your@email.com"
+                    {...register("email", { required: true })}
+                    style={{
+                      borderColor: "#e0e0e0",
+                      fontSize: "14px",
+                      padding: "10px 12px",
+                    }}
                   />
                 </div>
+              </div>
 
-                <div className="mb-3">
-                  <label className="fw-bold ">Password : </label>
+              <div className="mb-2">
+                <label
+                  className="form-label fw-600 text-dark mb-2"
+                  style={{ fontSize: "14px" }}
+                >
+                  Password
+                </label>
+                <div
+                  className="input-group"
+                  style={{ borderRadius: "8px", overflow: "hidden" }}
+                >
+                  <span
+                    className="input-group-text bg-white border-end-0"
+                    style={{ borderColor: "#e0e0e0" }}
+                  >
+                    🔑
+                  </span>
                   <input
                     type="password"
-                    className="form-control"
-                    placeholder="Enter Your Password..."
-                    {...register("password")}
+                    className="form-control border-start-0"
+                    placeholder="••••••••"
+                    {...register("password", { required: true })}
+                    style={{
+                      borderColor: "#e0e0e0",
+                      fontSize: "14px",
+                      padding: "10px 12px",
+                    }}
                   />
                 </div>
+              </div>
 
-                <div className="mb-3">
-                  <label className="fw-bold ">Mobile : </label>
+              <div className="mb-2">
+                <label
+                  className="form-label fw-600 text-dark mb-2"
+                  style={{ fontSize: "14px" }}
+                >
+                  Mobile Number
+                </label>
+                <div
+                  className="input-group"
+                  style={{ borderRadius: "8px", overflow: "hidden" }}
+                >
+                  <span
+                    className="input-group-text bg-white border-end-0"
+                    style={{ borderColor: "#e0e0e0" }}
+                  >
+                    📱
+                  </span>
                   <input
                     type="text"
-                    className="form-control"
-                    placeholder="Enter Your Mobile..."
-                    {...register("mobile")}
+                    className="form-control border-start-0"
+                    placeholder="+1 (555) 000-0000"
+                    {...register("mobile", { required: true })}
+                    style={{
+                      borderColor: "#e0e0e0",
+                      fontSize: "14px",
+                      padding: "10px 12px",
+                    }}
                   />
                 </div>
+              </div>
 
-                <div className=" d-flex justify-content- align-items-center">
-                  <button type="submit" className="btn  btn-primary w-25 me-3">
-                    Register
-                  </button>
-                  <NavLink to={"/login"} className="">
-                    Login
+              <button
+                type="submit"
+                className="btn w-100 fw-600 text-white mb-1"
+                style={{
+                  backgroundColor: "#28a745",
+                  padding: "10px 0",
+                  fontSize: "15px",
+                  borderRadius: "8px",
+                  border: "none",
+                  transition: "all 0.3s ease",
+                  cursor: "pointer",
+                }}
+                onMouseEnter={(e) =>
+                  (e.target.style.backgroundColor = "#218838")
+                }
+                onMouseLeave={(e) =>
+                  (e.target.style.backgroundColor = "#28a745")
+                }
+              >
+                Create Account
+              </button>
+
+              <div className="d-flex align-items-center">
+                <hr
+                  className="flex-grow-1"
+                  style={{ borderColor: "#e0e0e0" }}
+                />
+                <span className="px-2 text-muted" style={{ fontSize: "12px" }}>
+                  OR
+                </span>
+                <hr
+                  className="flex-grow-1"
+                  style={{ borderColor: "#e0e0e0" }}
+                />
+              </div>
+
+              <div className="text-center">
+                <p className="text-muted mb-0" style={{ fontSize: "14px" }}>
+                  Already have an account?{" "}
+                  <NavLink
+                    to="/login"
+                    className="text-decoration-none fw-600"
+                    style={{ color: "#28a745" }}
+                  >
+                    Sign In
                   </NavLink>
-                </div>
-              </form>
-            </div>
+                </p>
+              </div>
+            </form>
           </div>
         </div>
       </div>

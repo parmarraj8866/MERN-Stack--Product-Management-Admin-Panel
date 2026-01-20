@@ -2,7 +2,7 @@ import axios from "../utils/axiosConfig";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 export default function VerifyOtp() {
   const { register, handleSubmit, reset } = useForm();
@@ -19,31 +19,34 @@ export default function VerifyOtp() {
         console.log(res.data);
 
         if (!res.data.success) {
-          Swal.fire({
+          toast.error(res.data.message, {
             position: "top-center",
-            icon: "error",
-            title: res.data.message,
-            showConfirmButton: true,
-            timer: 3000,
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
           });
         } else {
-          Swal.fire({
+          toast.success(res.data.message, {
             position: "top-center",
-            icon: "success",
-            title: res.data.message,
-            showConfirmButton: true,
-            timer: 3000,
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
           });
           reset();
           redirect("/login");
         }
       } catch (error) {
-        Swal.fire({
+        toast.error(error.message, {
           position: "top-center",
-          icon: "success",
-          title: error.message,
-          showConfirmButton: true,
-          timer: 3000,
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
         });
       }
     }

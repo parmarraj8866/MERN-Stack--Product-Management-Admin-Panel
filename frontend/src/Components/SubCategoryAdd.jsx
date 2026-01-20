@@ -2,13 +2,15 @@ import axios from "../utils/axiosConfig";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 export default function SubCategory() {
   const { register, handleSubmit, reset } = useForm();
-  const [SubCate, setSubCate] = useState([]);
+  const [Cate, setCate] = useState([]);
+
   const URL = import.meta.env.VITE_SUBCATEGORY_URL;
   const CATEURL = import.meta.env.VITE_CATEGORY_URL;
+
   let date = new Date();
   let { id } = useParams();
   let redirect = useNavigate();
@@ -28,6 +30,9 @@ export default function SubCategory() {
     const res = await axios.get(CATEURL, {
       withCredentials: true,
     });
+
+    setCate(res.data.records);
+    console.log("Res... ", res);
   }
 
   // Sub Category Add and Update
@@ -40,12 +45,13 @@ export default function SubCategory() {
       );
       console.log("res", res);
       if (res.data.success) {
-        Swal.fire({
+        toast.success("Sub-Category Added!", {
           position: "top-center",
-          icon: "success",
-          title: "Sub-Category Added!",
-          showConfirmButton: true,
-          timer: 3000,
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
         });
         reset({
           subCategorySelect: "--select Category--",
@@ -53,12 +59,13 @@ export default function SubCategory() {
         });
         redirect("/subcategoryView");
       } else {
-        Swal.fire({
+        toast.error(res.data.message, {
           position: "top-center",
-          icon: "error",
-          title: res.data.message,
-          showConfirmButton: true,
-          timer: 3000,
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
         });
       }
     } else {
@@ -67,12 +74,13 @@ export default function SubCategory() {
         { currentDate, ...data },
         { withCredentials: true },
       );
-      Swal.fire({
+      toast.success("Sub-Category Updated!", {
         position: "top-center",
-        icon: "success",
-        title: "Sub-Category Updated!",
-        showConfirmButton: true,
-        timer: 3000,
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       });
       reset({ subCategorySelect: "--select Category--", subCategory_name: "" });
       redirect("/subcategoryView");
@@ -115,10 +123,10 @@ export default function SubCategory() {
           }}
           required
         >
-          <option value="--select Category--" disabled selected>
+          <option value="--select Category--" selected disabled>
             --select Category--
           </option>
-          {SubCate.map((ele, index) => {
+          {Cate.map((ele, index) => {
             return (
               <option key={index} value={ele._id}>
                 {ele.name}
