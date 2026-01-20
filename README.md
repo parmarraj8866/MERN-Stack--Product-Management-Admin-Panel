@@ -107,3 +107,4 @@ Built-in validation ensures data accuracy and security.
 
 🖼️ _Register Form:_  
 ![Register Form](./frontend/public/github%20Images/RegisterForm.png)
+
