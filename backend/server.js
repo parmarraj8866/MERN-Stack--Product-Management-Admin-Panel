@@ -6,6 +6,8 @@ const cors = require("cors")
 const session = require("cookie-session")
 const path = require("path")
 const cookieParser = require('cookie-parser')
+const swaggerUi = require('swagger-ui-express')
+const swaggerSpec = require('./Config/swagger')
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")))
 
@@ -17,7 +19,7 @@ app.use(express.json())
 app.use(express.urlencoded())
 app.use(cookieParser())
 app.use(cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://project-management-panel-raj8866.netlify.app"],
     credentials: true
 }))
 
@@ -28,6 +30,12 @@ app.use(session({
     maxAge: 60 * 60 * 1000
 }));
 
+// Swagger Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    swaggerOptions: {
+        persistAuthorization: true
+    }
+}))
 
 // import routing 
 

@@ -93,7 +93,7 @@ export default function DashboardHome() {
   return (
     <div className="container-fluid  py-2 px-2 ">
       <div
-        className="p-2 rounded"
+        className="p-2 rounded dashview"
         style={{
           backgroundColor: "rgba(10, 25, 47, 0.95)",
           height: "100vh",
@@ -105,22 +105,19 @@ export default function DashboardHome() {
         </div>
 
         <div
-          className="row justify-content-center g-4 dashview"
+          className="row justify-content-center g-4 "
           style={{ width: "100%", height: "500px" }}
         >
           {stats.map((item, index) => (
-            <div
-              className="col-12 col-sm-7 col-md-5 col-lg-3"
-              onClick={() => redirect(`/${item.loc}`)}
-              key={index}
-              style={{ cursor: "pointer" }}
-            >
+            <div className="col-12 col-sm-7 col-md-5 col-lg-3 " key={index}>
               <div
-                className="card text-center p-4 border-0 rounded-2 shadow-sm stat-card"
+                className="card text-center mb-2 p-4 border-0 rounded-2 shadow-sm stat-card"
+                onClick={() => redirect(`/${item.loc}`)}
                 style={{
                   borderRadius: "16px",
                   background: item.bgColor,
                   transition: "transform 0.3s, box-shadow 0.3s",
+                  cursor: "pointer",
                 }}
               >
                 <div
