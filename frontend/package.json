@@ -3,17 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
- 
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-<<<<<<< HEAD
     "preview": "vite preview",
     "start": "concurrently \"npm run server\" \"npm run dev\"",
     "server": "json-server --watch db.json --port 3000"
-=======
-    "preview": "vite preview"
->>>>>>> aa2aaa9320b4d8a733966086e94e2fbf79890c82
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",

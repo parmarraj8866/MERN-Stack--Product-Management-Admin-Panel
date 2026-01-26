@@ -21,7 +21,7 @@ export default function ProductList(props) {
 
   console.log(Product);
 
-  function Trash(id) {
+  async function Trash(id) {
     if (window.confirm("Do You Want to Delete Product?")) {
       toast.success("Product Deleted!", {
         position: "top-center",
@@ -31,7 +31,7 @@ export default function ProductList(props) {
         pauseOnHover: true,
         draggable: true,
       });
-      axios.delete(`${URL}/${id}`, { withCredentials: true });
+      await axios.delete(`${URL}/${id}`, { withCredentials: true });
       showData();
     } else {
       toast.info("Not Delete!", {
